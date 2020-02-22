@@ -23,7 +23,7 @@
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="6" :offset="1">
-            <img src="../img/login_logo.png" alt />
+            <img class="img_code" :src="code_yz" alt />
           </el-col>
         </el-row>
       </el-form-item>
@@ -50,6 +50,8 @@
 export default {
   data() {
     return {
+        // 验证码发送
+        code_yz:process.env.VUE_APP_URL+'/captcha?type=sendsms',
       dialogFormVisible: false,
       form: {},
       rules: {},
@@ -65,5 +67,8 @@ export default {
   .el-dialog__title {
     color: #fff;
   }
+}
+.img_code{
+    width: 100%;
 }
 </style>
