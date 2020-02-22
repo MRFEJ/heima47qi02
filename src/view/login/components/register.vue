@@ -6,21 +6,21 @@
       </el-form-item>
 
       <el-form-item label="邮箱" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-input v-model="form.email" autocomplete="off"></el-input>
       </el-form-item>
 
       <el-form-item label="手机" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-input v-model="form.phone" autocomplete="off"></el-input>
       </el-form-item>
 
       <el-form-item label="密码" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-input v-model="form.password" autocomplete="off"></el-input>
       </el-form-item>
 
       <el-form-item label="图形码" :label-width="formLabelWidth">
         <el-row>
           <el-col :span="17">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
+            <el-input v-model="form.code" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="6" :offset="1">
             <img @click="goCode" class="img_code" :src="code_yz" alt />
@@ -31,7 +31,7 @@
       <el-form-item label="验证码" :label-width="formLabelWidth">
         <el-row>
           <el-col :span="17">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
+            <el-input v-model="form.rcode" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="6" :offset="1">
             <el-button :disabled="time!=0" @click="code_bt">{{ time==0? '获取用户验证码':'还有'+time+'秒'}}</el-button>
@@ -55,8 +55,31 @@ export default {
       // 验证码发送
       code_yz: process.env.VUE_APP_URL + "/captcha?type=sendsms",
       dialogFormVisible: false,
-      form: {},
-      rules: {},
+      form: {
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        code: "",
+        rcode: ""
+      },
+      rules: {
+        name: [{ required: true, message: "昵称不能为空", trigger: "blur" }],
+        email: [
+          { required: true, message: "邮箱不能为空", trigger: "blur" },
+          { pattern: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/, mesage: "邮箱格式不正确", trigger: "blur" }
+        ],
+        phone: [
+          { required: true, message: "手机号不能为空", trigger: "blur" },
+          { pattern: /0?(13|14|15|18)[0-9]{9}/, mesage: "手机号格式不正确", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { max: 12, min: 6, mesage: "密码必须在6-12位", trigger: "change" }
+        ],
+        code: [{ required: true, message: "图形码不能为空", trigger: "blur" }],
+        rcode: [{ required: true, message: "验证码不能为空", trigger: "blur" }]
+      },
       formLabelWidth: "65px"
     };
   },
@@ -73,7 +96,20 @@ export default {
         if (this.time == 0) {
           clearInterval(times);
         }
-      }, 100);
+      }, 1000);
+
+      this.$axios({
+        url: process.env.VUE_APP_URL + "/sendsms",
+        method: "post",
+        data: {
+          code: this.form.code,
+          phone: this.form.phone
+        },
+        withCredentials: true
+      }).then(res => {
+        //成功回调
+        console.log(res);
+      });
     }
   }
 };
