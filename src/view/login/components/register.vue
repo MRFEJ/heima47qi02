@@ -23,7 +23,7 @@
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="6" :offset="1">
-            <img class="img_code" :src="code_yz" alt />
+            <img @click="goCode" class="img_code" :src="code_yz" alt />
           </el-col>
         </el-row>
       </el-form-item>
@@ -57,7 +57,12 @@ export default {
       rules: {},
       formLabelWidth: "65px"
     };
-  }
+  },
+  methods: {
+      goCode(){
+          this.code_yz=process.env.VUE_APP_URL+'/captcha?type=sendsms'+'&l='+new Date();
+      }
+  },
 };
 </script>
 
