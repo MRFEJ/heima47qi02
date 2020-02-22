@@ -1,23 +1,23 @@
 <template>
   <el-dialog title="用户注册" width="600px" center :visible.sync="dialogFormVisible">
-    <el-form :model="form">
-      <el-form-item label="昵称" :label-width="formLabelWidth">
+    <el-form :model="form" ref="form" :rules="rules">
+      <el-form-item label="昵称" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="邮箱" :label-width="formLabelWidth">
+      <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
         <el-input v-model="form.email" autocomplete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="手机" :label-width="formLabelWidth">
+      <el-form-item label="手机" :label-width="formLabelWidth" prop="phone">
         <el-input v-model="form.phone" autocomplete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="密码" :label-width="formLabelWidth">
-        <el-input v-model="form.password" autocomplete="off"></el-input>
+      <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
+        <el-input show-password v-model="form.password" autocomplete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="图形码" :label-width="formLabelWidth">
+      <el-form-item label="图形码" :label-width="formLabelWidth"  prop="code">
         <el-row>
           <el-col :span="17">
             <el-input v-model="form.code" autocomplete="off"></el-input>
@@ -28,7 +28,7 @@
         </el-row>
       </el-form-item>
 
-      <el-form-item label="验证码" :label-width="formLabelWidth">
+      <el-form-item label="验证码" :label-width="formLabelWidth"  prop="rcode">
         <el-row>
           <el-col :span="17">
             <el-input v-model="form.rcode" autocomplete="off"></el-input>
@@ -41,7 +41,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      <el-button type="primary" @click="sure">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -84,6 +84,7 @@ export default {
     };
   },
   methods: {
+    //   发送图片验证码
     goCode() {
       this.code_yz =
         process.env.VUE_APP_URL + "/captcha?type=sendsms" + "&l=" + new Date();
@@ -109,7 +110,19 @@ export default {
       }).then(res => {
         //成功回调
         console.log(res);
+        if(res.data.code==200){
+            alert('验证码为:'+res.data.data.captcha)
+        }else{
+            alert(res.data.message)
+        }
       });
+    },
+    sure(){
+        this.$refs.form.validate(v=>{
+            if(v){
+                alert('验证通过')
+            }
+        })
     }
   }
 };
