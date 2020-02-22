@@ -50,18 +50,24 @@
           <el-row>
             <el-col>
               <el-button type="primary" @click="submitForm">立即创建</el-button>
-              <el-button type="primary">注册</el-button>
+              <el-button type="primary" @click="Login_reg">注册</el-button>
             </el-col>
           </el-row>
         </el-form-item>
       </el-form>
     </div>
+    <!-- 注册 -->
+    <reg ref="reg"></reg>
     <img src="./img/login_banner_ele.png" alt />
   </div>
 </template>
 
 <script>
+import reg from "./components/register"
 export default {
+  components:{
+    reg
+  },
   data() {
     return {
       form: {
@@ -92,12 +98,17 @@ export default {
     };
   },
   methods: {
+    // 点击登录
     submitForm() {
       this.$refs.form.validate(v => {
         if (v) {
           alert("登录成功");
         }
       });
+    },
+    // 点击注册
+    Login_reg(){
+      this.$refs.reg.dialogFormVisible=true;
     }
   }
 };
