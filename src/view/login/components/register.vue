@@ -34,7 +34,7 @@
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="6" :offset="1">
-              <el-button>获取用户验证码</el-button>
+            <el-button :disabled="time!=0" @click="code_bt">{{ time==0? '获取用户验证码':'还有'+time+'秒'}}</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -50,8 +50,10 @@
 export default {
   data() {
     return {
-        // 验证码发送
-        code_yz:process.env.VUE_APP_URL+'/captcha?type=sendsms',
+      // 短信计时
+      time: 0,
+      // 验证码发送
+      code_yz: process.env.VUE_APP_URL + "/captcha?type=sendsms",
       dialogFormVisible: false,
       form: {},
       rules: {},
@@ -59,10 +61,21 @@ export default {
     };
   },
   methods: {
-      goCode(){
-          this.code_yz=process.env.VUE_APP_URL+'/captcha?type=sendsms'+'&l='+new Date();
-      }
-  },
+    goCode() {
+      this.code_yz =
+        process.env.VUE_APP_URL + "/captcha?type=sendsms" + "&l=" + new Date();
+    },
+    //   点击btn发送短信验证码
+    code_bt() {
+      this.time = 60;
+      let times = setInterval(() => {
+        this.time--;
+        if (this.time == 0) {
+          clearInterval(times);
+        }
+      }, 100);
+    }
+  }
 };
 </script>
 
@@ -73,7 +86,7 @@ export default {
     color: #fff;
   }
 }
-.img_code{
-    width: 100%;
+.img_code {
+  width: 100%;
 }
 </style>
