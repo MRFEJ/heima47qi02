@@ -33,7 +33,7 @@
               ></el-input>
             </el-col>
             <el-col :span="7">
-              <img class="img_code" src="./img/login_banner_ele.png" alt />
+              <img @click="img_code" class="img_code" :src="imgUrl" alt />
             </el-col>
           </el-row>
         </el-form-item>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import {login} from "@/api/login.js"
 import reg from "./components/register";
 export default {
   components: {
@@ -70,6 +71,8 @@ export default {
   },
   data() {
     return {
+      // 图片验证码
+      imgUrl: process.env.VUE_APP_URL+"/captcha?type=login",
       form: {
         phone: "",
         password: "",
@@ -92,7 +95,7 @@ export default {
         ],
         code: [
           { required: true, message: "验证码不能为空", trigger: "blur" },
-          { max: 4, min: 4, message: "验证码是4位", trigger: "change" }
+          { len:4, message: "验证码是4位", trigger: "blur" }
         ],
         checked: [
           {
@@ -109,13 +112,31 @@ export default {
     submitForm() {
       this.$refs.form.validate(v => {
         if (v) {
-          alert("登录成功");
+          login({
+            phone:this.form.phone,
+            password:this.form.password,
+            code:this.form.code
+          }).then(res=>{
+            // console.log(res)
+            if(res.data.code==200){
+              this.$message.success('登陆成功!');
+              window.localStorage.setItem("token",res.data.data.token);
+              this.$router.push('/index');
+            }else{
+              this.img_code()
+              this.$message.error(res.data.message)
+            }
+          })
         }
       });
     },
     // 点击注册
     Login_reg() {
       this.$refs.reg.dialogFormVisible = true;
+    },
+    // 点击图片验证码
+    img_code(){
+      this.imgUrl= process.env.VUE_APP_URL+"/captcha?type=login"+"&g="+Math.random()//+"&s="+Date.now()
     }
   }
 };

@@ -11,10 +11,6 @@ routes: [
  {
 path: '/login',
 component: login //这里要填入一个组件名(填入import的名字)，也就是上面地址对应的组件
- },
- {
-path: '*',  //路由重定向
-redirect: '/', //这里要填入一个组件名(填入import的名字)，也就是上面地址对应的组件
  }
   ]
 })
