@@ -49,7 +49,7 @@
         <el-form-item>
           <el-row>
             <el-col>
-              <el-button type="primary" @click="submitForm">立即创建</el-button>
+              <el-button type="primary" @click="submitForm">立即登录</el-button>
               <el-button type="primary" @click="Login_reg">注册</el-button>
             </el-col>
           </el-row>
@@ -63,9 +63,9 @@
 </template>
 
 <script>
-import reg from "./components/register"
+import reg from "./components/register";
 export default {
-  components:{
+  components: {
     reg
   },
   data() {
@@ -79,14 +79,21 @@ export default {
       rules: {
         phone: [
           { required: true, message: "手机号不能为空", trigger: "blur" },
-          { pattern: /0?(13|14|15|18)[0-9]{9}/, message: "手机号格式不正确",trigger:'blur' }
+          {
+            pattern: /^0?(13|14|15|18)[0-9]{9}$/,
+            message: "手机号格式不正确",
+            trigger: "blur"
+          }
         ],
 
         password: [
           { required: true, message: "密码不能为空", trigger: "blur" },
           { max: 12, min: 6, message: "密码在6-12位", trigger: "change" }
         ],
-        code: [{ required: true, message: "验证码不能为空", trigger: "blur" }],
+        code: [
+          { required: true, message: "验证码不能为空", trigger: "blur" },
+          { max: 4, min: 4, message: "验证码是4位", trigger: "change" }
+        ],
         checked: [
           {
             pattern: /true/,
@@ -107,8 +114,8 @@ export default {
       });
     },
     // 点击注册
-    Login_reg(){
-      this.$refs.reg.dialogFormVisible=true;
+    Login_reg() {
+      this.$refs.reg.dialogFormVisible = true;
     }
   }
 };
