@@ -1,5 +1,5 @@
 // 保存进硬盘的key名字
-const TOKENKEY = "heimatoken";
+const TOKENKEY = "heimatoken2";
 
 // 保存token
 export function setToken(key) {
@@ -10,6 +10,6 @@ export function getToken() {
     return window.localStorage.getItem(TOKENKEY)
 }
 // 删除token
-export function remove() {
+export function removeToken() {
     return window.localStorage.removeItem(TOKENKEY)
 }
