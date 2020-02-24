@@ -64,7 +64,9 @@
 
 <script>
 import {login} from "@/api/login.js"
-import reg from "./components/register";
+import reg from "./components/register"
+
+import {setToken} from "@/utils/token.js"
 export default {
   components: {
     reg
@@ -120,7 +122,8 @@ export default {
             // console.log(res)
             if(res.data.code==200){
               this.$message.success('登陆成功!');
-              window.localStorage.setItem("token",res.data.data.token);
+              // window.localStorage.setItem("token",res.data.data.token);
+              setToken(res.data.data.token)
               this.$router.push('/index');
             }else{
               this.img_code()
@@ -136,7 +139,7 @@ export default {
     },
     // 点击图片验证码
     img_code(){
-      this.imgUrl= process.env.VUE_APP_URL+"/captcha?type=login"+"&g="+Math.random()//+"&s="+Date.now()
+      this.imgUrl= process.env.VUE_APP_URL+"/captcha?type=login"+"&a="+Date.now()
     }
   }
 };
