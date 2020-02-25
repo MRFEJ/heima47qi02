@@ -1,5 +1,5 @@
 <template>
-  <div>我是index的子路由</div>
+  <div>企业列表</div>
 </template>
 
 <script>
