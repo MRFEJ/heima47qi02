@@ -1,6 +1,8 @@
 import Vue from "vue"
 import login from "../view/login/login.vue"
 import index from "../view/index/index.vue"
+
+import user from "@/view/index/user/index.vue"
 // 导入 vue-router
 import VueRouter from 'vue-router'
 //注册 vue-router
@@ -15,7 +17,10 @@ const router = new VueRouter({
     },
     {
       path: '/index',
-      component: index //这里要填入一个组件名(填入import的名字)，也就是上面地址对应的组件
+      component: index, //这里要填入一个组件名(填入import的名字)，也就是上面地址对应的组件
+      children: [
+        {path:'user',component:user}
+      ]
     }
 
   ]

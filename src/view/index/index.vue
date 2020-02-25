@@ -26,7 +26,7 @@
 
           <el-menu-item index="2">
             <i class="el-icon-user"></i>
-            <span slot="title">用户列表</span>
+            <span slot="title" @click="gouser">用户列表</span>
           </el-menu-item>
 
           <el-menu-item index="3">
@@ -45,7 +45,9 @@
           </el-menu-item>
         </el-menu>
       </el-aside>
-      <el-main class="my_main">Main</el-main>
+      <el-main class="my_main">
+          <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -75,6 +77,7 @@ export default {
   },
 
   methods: {
+    //   点击退出
     goOut() {
       this.$confirm("此操作将退出本系统, 是否继续退出?", "提示", {
         confirmButtonText: "确定",
@@ -83,7 +86,7 @@ export default {
       })
         .then(() => {
           logout().then(res => {
-            window.console.log(res);
+            // window.console.log(res);
             if (res.data.code == 200) {
               removeToken();
               this.$message.success("退出成功!");
@@ -97,6 +100,10 @@ export default {
             message: "谢谢您还留下来!!!"
           });
         });
+    },
+    // 点击侧边栏用户列表传送
+    gouser(){
+        this.$router.push('/index/user')
     }
   }
 };

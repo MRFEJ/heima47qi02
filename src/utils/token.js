@@ -1,4 +1,4 @@
-// 保存进硬盘的key名字
+// 保存进硬盘的key名字  TOKENKEY是常量用大写字母
 const TOKENKEY = "heimatoken2";
 
 // 保存token
