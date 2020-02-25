@@ -21,17 +21,29 @@ const router = new VueRouter({
   routes: [
     {
       path: '/login',
-      component: login //这里要填入一个组件名(填入import的名字)，也就是上面地址对应的组件
+      component: login, //这里要填入一个组件名(填入import的名字)，也就是上面地址对应的组件
+      meta: { title: "登录" }
     },
     {
       path: '/index',
       component: index, //这里要填入一个组件名(填入import的名字)，也就是上面地址对应的组件
+      meta: { title: "首页" },
       children: [
-        { path: 'overview', component: overview },
-        { path: 'user', component: user },
-        { path: 'Question', component: Question },
-        { path: 'Companies', component: Companies },
-        { path: 'Subject', component: Subject },
+        {
+          path: 'overview', component: overview, meta: { title: "数据概览" },
+        },
+        {
+          path: 'user', component: user, meta: { title: "用户列表" },
+        },
+        {
+          path: 'Question', component: Question, meta: { title: "题库列表" },
+        },
+        {
+          path: 'Companies', component: Companies, meta: { title: "企业列表" },
+        },
+        {
+          path: 'Subject', component: Subject, meta: { title: "学科列表" },
+        },
       ]
     }
 
@@ -48,7 +60,9 @@ router.beforeEach((to, from, next) => {
   next();
 })
 
-router.afterEach(() => {
+router.afterEach((to) => {
+  // window.console.log(to);
+  document.title=to.meta.title
   // 在改变路径之后关闭进度条
   NProgress.done();
   // to and from are both route objects.

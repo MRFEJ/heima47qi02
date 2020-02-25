@@ -68,6 +68,7 @@ export default {
     };
   },
   created() {
+    
     //   页面加载发送请求 获取用户名和头像信息
     info().then(res => {
       // window.console.log(res);
