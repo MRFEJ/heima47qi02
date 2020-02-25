@@ -8,6 +8,9 @@ import Question from "@/view/index/Question/Question.vue"
 import Companies from "@/view/index/Companies/Companies.vue"
 import Subject from "@/view/index/Subject/Subject.vue"
 
+// 导入进度条插件
+import NProgress from "nprogress"
+import "nprogress/nprogress.css"
 // 导入 vue-router
 import VueRouter from 'vue-router'
 //注册 vue-router
@@ -33,5 +36,21 @@ const router = new VueRouter({
     }
 
   ]
+})
+
+// 导航守卫
+// 当路由的路径发生变化的时候 就执行 这两个钩子  一个是改变前执行的回调  一个是路由改变后的回调
+router.beforeEach((to, from, next) => {
+  // to and from are both route objects. must call `next`.
+  // 在路径改变前开启进度条
+  NProgress.start();
+  // 一定要写  这个next()是出去的方法
+  next();
+})
+
+router.afterEach(() => {
+  // 在改变路径之后关闭进度条
+  NProgress.done();
+  // to and from are both route objects.
 })
 export default router
