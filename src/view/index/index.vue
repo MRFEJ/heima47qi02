@@ -55,8 +55,14 @@
 
 <script>
 import { info, logout } from "@/api/index.js";
-import { removeToken } from "@/utils/token.js";
+import { removeToken,getToken } from "@/utils/token.js";
 export default {
+  beforeCreate() {
+    if(!getToken()){
+      this.$message.error('还没有登录,请您先登录!')
+      this.$router.push('/login')
+    }
+  },
   data() {
     return {
       // 是否收起

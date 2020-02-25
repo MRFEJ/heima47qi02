@@ -8,6 +8,14 @@ import Question from "@/view/index/Question/Question.vue"
 import Companies from "@/view/index/Companies/Companies.vue"
 import Subject from "@/view/index/Subject/Subject.vue"
 
+// 单独淡入message
+import { Message } from 'element-ui';
+
+// 导入info请求的文件
+import {info} from "@/api/index.js"
+
+// 导入token文件
+import {removeToken} from "@/utils/token"
 // 导入进度条插件
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
@@ -56,13 +64,28 @@ router.beforeEach((to, from, next) => {
   // to and from are both route objects. must call `next`.
   // 在路径改变前开启进度条
   NProgress.start();
-  // 一定要写  这个next()是出去的方法
-  next();
+  if (to.path == '/login') {
+    // 一定要写  这个next()是出去的方法
+    next();
+  } else {
+    info().then(res => {
+      if (res.data.code == 200) {
+        next();
+      } else if(res.data.code == 206) {
+        Message.error('登录异常,请重新登录!');
+        removeToken();
+        // 关闭进度条
+        NProgress.done();
+
+        this.$router.push('/login')
+      }
+    })
+  }
 })
 
 router.afterEach((to) => {
   // window.console.log(to);
-  document.title=to.meta.title
+  document.title = to.meta.title
   // 在改变路径之后关闭进度条
   NProgress.done();
   // to and from are both route objects.
