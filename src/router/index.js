@@ -53,18 +53,23 @@ const router = new VueRouter({
           path: 'Subject', component: Subject, meta: { title: "学科列表" },
         },
       ]
+    },
+    {
+      path: '/',
+      redirect:'/login'
     }
 
   ]
 })
 
+let whileArr=["/login","/news"]
 // 导航守卫
 // 当路由的路径发生变化的时候 就执行 这两个钩子  一个是改变前执行的回调  一个是路由改变后的回调
 router.beforeEach((to, from, next) => {
   // to and from are both route objects. must call `next`.
   // 在路径改变前开启进度条
   NProgress.start();
-  if (to.path == '/login') {
+  if (whileArr.includes(to.path)) {
     // 一定要写  这个next()是出去的方法
     next();
   } else {
@@ -77,7 +82,7 @@ router.beforeEach((to, from, next) => {
         // 关闭进度条
         NProgress.done();
 
-        this.$router.push('/login')
+        next('/login')
       }
     })
   }
