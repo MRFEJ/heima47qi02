@@ -11,11 +11,13 @@ import Subject from "@/view/index/Subject/Subject.vue"
 // 单独淡入message
 import { Message } from 'element-ui';
 
+// 导入vuex
+import store from "@/store/index.js"
 // 导入info请求的文件
-import {info} from "@/api/index.js"
+import { info } from "@/api/index.js"
 
 // 导入token文件
-import {removeToken} from "@/utils/token"
+import { removeToken } from "@/utils/token"
 // 导入进度条插件
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
@@ -56,13 +58,13 @@ const router = new VueRouter({
     },
     {
       path: '/',
-      redirect:'/login'
+      redirect: '/login'
     }
 
   ]
 })
 
-let whileArr=["/login","/news"]
+let whileArr = ["/login", "/news"]
 // 导航守卫
 // 当路由的路径发生变化的时候 就执行 这两个钩子  一个是改变前执行的回调  一个是路由改变后的回调
 router.beforeEach((to, from, next) => {
@@ -75,8 +77,12 @@ router.beforeEach((to, from, next) => {
   } else {
     info().then(res => {
       if (res.data.code == 200) {
+        // 保存用户名和头像进vuex
+        store.commit('changeUsername', res.data.data.username);
+        store.commit('changeAvatar', process.env.VUE_APP_URL + "/" +res.data.data.avatar);
+
         next();
-      } else if(res.data.code == 206) {
+      } else if (res.data.code == 206) {
         Message.error('登录异常,请重新登录!');
         removeToken();
         // 关闭进度条

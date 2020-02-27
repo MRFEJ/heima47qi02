@@ -11,8 +11,8 @@
         <span class="text">黑马面面</span>
       </div>
       <div class="right">
-        <img class="avatar" :src="avatar" alt />
-        <span class="name">{{username}},您好</span>
+        <img class="avatar" :src="$store.state.avatar" alt />
+        <span class="name">{{$store.state.username}},您好</span>
         <el-button @click="goOut" type="primary" size="mini">退出</el-button>
       </div>
     </el-header>
@@ -47,20 +47,20 @@
       </el-aside>
       <el-main class="my_main">
         <!-- 子路由出口 -->
-          <router-view></router-view>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import { info, logout } from "@/api/index.js";
-import { removeToken,getToken } from "@/utils/token.js";
+import { logout } from "@/api/index.js";
+import { removeToken, getToken } from "@/utils/token.js";
 export default {
   beforeCreate() {
-    if(!getToken()){
-      this.$message.error('还没有登录,请您先登录!')
-      this.$router.push('/login')
+    if (!getToken()) {
+      this.$message.error("还没有登录,请您先登录!");
+      this.$router.push("/login");
     }
   },
   data() {
@@ -73,16 +73,16 @@ export default {
       avatar: ""
     };
   },
-  created() {
-    
-    //   页面加载发送请求 获取用户名和头像信息
-    info().then(res => {
-      // window.console.log(res);
-      this.username = res.data.data.username;
-      // 注意这里返回的是没有基地址的图片路径 所以要给他添加上去  细节:中间还有斜杠 /
-      this.avatar = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
-    });
-  },
+  // created() {
+
+  //   //   页面加载发送请求 获取用户名和头像信息
+  //   info().then(res => {
+  //     // window.console.log(res);
+  //     this.username = res.data.data.username;
+  //     // 注意这里返回的是没有基地址的图片路径 所以要给他添加上去  细节:中间还有斜杠 /
+  //     this.avatar = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
+  //   });
+  // },
 
   methods: {
     //   点击退出
@@ -97,6 +97,10 @@ export default {
             // window.console.log(res);
             if (res.data.code == 200) {
               removeToken();
+              // 清空vuex的记录
+              this.$store.commit("changeUsername", "");
+              this.$store.commit("changeAvatar", "");
+
               this.$message.success("退出成功!");
               this.$router.push("/login");
             }
@@ -108,7 +112,7 @@ export default {
             message: "谢谢您还留下来!!!"
           });
         });
-    },
+    }
   }
 };
 </script>
