@@ -76,8 +76,8 @@ export default {
       // 图片验证码
       imgUrl: process.env.VUE_APP_URL+"/captcha?type=login",
       form: {
-        phone: "13888888888",
-        password: "123456",
+        phone: "18511111111",
+        password: "12345678",
         code: "",
         checked: true
       },
