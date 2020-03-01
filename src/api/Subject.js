@@ -31,3 +31,31 @@ export function subjectStatus(data) {
         data
     })
 }
+
+// 删除学科
+export function subjectRemove(data) {
+    return subjectRequery({
+        url: '/subject/remove',
+        method:"post",
+        data
+    })
+}
+// 新增学科
+export function subjectAdd(data) {
+    return subjectRequery({
+        url: '/subject/add',
+        method:"post",
+        data
+    })
+}
+
+// 编辑学科
+export function subjectEdit(data) {
+    return subjectRequery({
+        url: '/subject/edit',
+        method:"post",
+        data
+    })
+}
+
+
