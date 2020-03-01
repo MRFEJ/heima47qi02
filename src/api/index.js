@@ -9,7 +9,7 @@ let indexRequry = axios.create({
 indexRequry.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
     config.headers.token = getToken();
-    window.console.log(config);
+    // window.console.log(config);
     
     return config;
   }, function (error) {

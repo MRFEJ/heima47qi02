@@ -174,6 +174,7 @@ body {
 }
 .my_main {
   background-color: yellowgreen;
+  overflow: hidden !important;
 }
 
 // 侧边导航栏样式
