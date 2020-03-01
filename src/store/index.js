@@ -6,6 +6,7 @@ const store = new Vuex.Store({
         //数据
         username: '',
         avatar: '',
+        Role:'',
     },
     mutations: {
         //改数据的方法
@@ -14,7 +15,11 @@ const store = new Vuex.Store({
         },
         changeAvatar(state,val) {
             state.avatar=val
+        },
+        changeRole(state,val) {
+            state.Role=val
         }
+
     },
 })
 export default store

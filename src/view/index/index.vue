@@ -19,30 +19,14 @@
     <el-container>
       <el-aside class="my_aside" width="auto">
         <el-menu router default-active="1" class="el-menu-vertical-demo" :collapse="isCollapse">
-          <el-menu-item index="/index/overview">
-            <i class="el-icon-pie-chart"></i>
-            <span slot="title">数据概览</span>
-          </el-menu-item>
 
-          <el-menu-item index="/index/user">
-            <i class="el-icon-user"></i>
-            <span slot="title">用户列表</span>
-          </el-menu-item>
+          <template v-for="(item, index) in route" >
+            <el-menu-item :index="/index/+item.path" :key="index" v-if="item.meta.role.includes($store.state.Role)">
+              <i :class="item.meta.icon"></i>
+              <span slot="title">{{item.meta.title}}</span>
+            </el-menu-item>
+          </template>
 
-          <el-menu-item index="/index/Question">
-            <i class="el-icon-edit-outline"></i>
-            <span slot="title">题库列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/Companies">
-            <i class="el-icon-office-building"></i>
-            <span slot="title">企业列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/Subject">
-            <i class="el-icon-notebook-2"></i>
-            <span slot="title">学科列表</span>
-          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main class="my_main">
@@ -54,6 +38,8 @@
 </template>
 
 <script>
+// 导入子路由
+import route from "@/router/rout.js"
 import { logout } from "@/api/index.js";
 import { removeToken, getToken } from "@/utils/token.js";
 export default {
@@ -65,6 +51,7 @@ export default {
   },
   data() {
     return {
+      route,
       // 是否收起
       isCollapse: false,
       // 用户名

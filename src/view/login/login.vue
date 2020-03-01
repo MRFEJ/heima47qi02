@@ -121,7 +121,6 @@ export default {
           }).then(res=>{
             // console.log(res)
             if(res.data.code==200){
-              this.$message.success('登陆成功!');
               // window.localStorage.setItem("token",res.data.data.token);
               setToken(res.data.data.token)
               this.$router.push('/index');

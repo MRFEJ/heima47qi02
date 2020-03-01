@@ -2,12 +2,8 @@ import Vue from "vue"
 import login from "../view/login/login.vue"
 import index from "../view/index/index.vue"
 
-import overview from "@/view/index/overview/overview.vue"
-import user from "@/view/index/user/user.vue"
-import Question from "@/view/index/Question/Question.vue"
-import Companies from "@/view/index/Companies/Companies.vue"
-import Subject from "@/view/index/Subject/Subject.vue"
-
+// 导入子路由
+import rout from "./rout.js"
 // 单独淡入message
 import { Message } from 'element-ui';
 
@@ -37,24 +33,8 @@ const router = new VueRouter({
     {
       path: '/index',
       component: index, //这里要填入一个组件名(填入import的名字)，也就是上面地址对应的组件
-      meta: { title: "首页" },
-      children: [
-        {
-          path: 'overview', component: overview, meta: { title: "数据概览" },
-        },
-        {
-          path: 'user', component: user, meta: { title: "用户列表" },
-        },
-        {
-          path: 'Question', component: Question, meta: { title: "题库列表" },
-        },
-        {
-          path: 'Companies', component: Companies, meta: { title: "企业列表" },
-        },
-        {
-          path: 'Subject', component: Subject, meta: { title: "学科列表" },
-        },
-      ]
+      meta: { title: "首页", role: ['超级管理员', '管理员', '老师', '学生'] },
+      children: rout
     },
     {
       path: '/',
@@ -76,12 +56,32 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     info().then(res => {
-      if (res.data.code == 200) {
-        // 保存用户名和头像进vuex
-        store.commit('changeUsername', res.data.data.username);
-        store.commit('changeAvatar', process.env.VUE_APP_URL + "/" +res.data.data.avatar);
+      window.console.log(res);
 
-        next();
+      if (res.data.code == 200) {
+        // 先判断用户的状态是否合格 合格就让他进去  不合格就不让他进去
+        if (res.data.data.status == 1) {
+          if (from.path == "/login") {
+            Message.success('登陆成功!');
+          }
+          // 保存用户名和头像进vuex
+          store.commit('changeUsername', res.data.data.username);
+          store.commit('changeAvatar', process.env.VUE_APP_URL + "/" + res.data.data.avatar);
+          store.commit('changeRole', res.data.data.role);
+
+          next();
+          if (to.meta.role.includes(res.data.data.role)) {
+            next();
+          } else {
+            Message.warning('对不起,您无权访问');
+            next(from.path)
+          }
+        } else {
+          Message.error('您的账号无法访问系统!请与管理员联系');
+          // 关闭进度条
+          NProgress.done();
+          next('/login')
+        }
       } else if (res.data.code == 206) {
         Message.error('登录异常,请重新登录!');
         removeToken();

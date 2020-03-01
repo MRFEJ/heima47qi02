@@ -174,6 +174,12 @@ export default {
       this.$refs.userCom.dialogFormVisible = true;
       // 如果后面点击的那行不是前面点击的那行 就重新赋值 如果2次点击是同一行就不赋值
       if (this.oldItem != item) {
+        if (item.status) {
+          this.$refs.userCom.ztai = "启用";
+        } else {
+          this.$refs.userCom.ztai = "禁用";
+        }
+        // if(item.)
         this.$refs.userCom.form = { ...item };
         this.oldItem = item;
       }
